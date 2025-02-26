@@ -7,24 +7,15 @@ namespace WebShoppingOnline.Models.Authentication
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if(context.HttpContext.Session.GetString("UserName") == "admin")
-            {
-                context.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary
-                    {
-                        { "Controller", "Admin" },
-                        { "Action", "Dashboard" }
-                    });
-            }
-            else
+            if(context.HttpContext.Session.GetString("UserName") == null)
             {
                 context.Result = new RedirectToRouteResult(
                     new RouteValueDictionary
                     {
                         { "Controller", "Home" },
-                        { "Action", "Index" }
+                        { "Action", "LogIn" }
                     });
-            }
+            }    
         }
     }
 }

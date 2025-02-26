@@ -237,5 +237,61 @@ namespace WebShoppingOnline.Controllers
             TempData["Message"] = "Sản phẩm đã được xóa thành công";
             return RedirectToAction("ProductManagement");
         }
+
+        [Route("CategoryManagement")]
+        [HttpGet]
+        public IActionResult CategoryManagement()
+        {
+            var categories = myDb.Categories.ToList();
+            var newId = _func.SetId<Category>("CA", c => c.CategoryId);
+            var model = (categories, newId);
+            return View(model);
+        }
+
+        [Route("CategoryManagement")]
+        [HttpPost]
+        public IActionResult CategoryManagement(string categoryName)
+        {
+            var newId = _func.SetId<Category>("CA", c => c.CategoryId);
+            Category category = new Category();
+            category.CategoryId = newId;
+            category.CategoryName = categoryName;
+            myDb.Categories.Add(category);
+            myDb.SaveChanges();
+
+            var categories = myDb.Categories.ToList();
+            newId = _func.SetId<Category>("CA", c => c.CategoryId);
+            var model = (categories, newId);
+            return View(model);
+        }
+
+        [Route("SupplierManagement")]
+        [HttpGet]
+        public IActionResult SupplierManagement()
+        {
+            var suppliers = myDb.Suppliers.ToList();
+            var newId = _func.SetId<Supplier>("SU", c => c.SupplierId);
+            var model = (suppliers, newId);
+            return View(model);
+        }
+
+        [Route("SupplierManagement")]
+        [HttpPost]
+        public IActionResult SupplierManagement(string supplierName, string phone, string address)
+        {
+            var newId = _func.SetId<Supplier>("SU", c => c.SupplierId);
+            Supplier supplier = new Supplier();
+            supplier.SupplierId = newId;
+            supplier.SupplierName = supplierName;
+            supplier.Phone = phone;
+            supplier.Address = address;
+            myDb.Suppliers.Add(supplier);
+            myDb.SaveChanges();
+
+            var suppliers = myDb.Suppliers.ToList();
+            newId = _func.SetId<Supplier>("SU", c => c.SupplierId);
+            var model = (suppliers, newId);
+            return View(model);
+        }
     }
 }

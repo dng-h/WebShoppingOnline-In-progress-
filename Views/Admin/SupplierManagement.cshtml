@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "SupplierManagement";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model (List<Supplier> suppliers, string newId)
+
+<div class="container">
+    <div class="header">
+        <h2>Nhà cung cấp</h2>
+        @using (Html.BeginForm("SupplierManagement", "Admin", FormMethod.Post))
+        {
+            @Html.TextBox("supplierId", Model.newId, new { @id = "supplierId", disabled = "disabled" })
+            @Html.TextBox("supplierName", "", new { @id = "supplierName", placeholder = "Tên nhà cung cấp", required = "required" })
+            @Html.TextBox("phone", "", new { @id = "phone", placeholder = "Số điện thoại" })
+            @Html.TextBox("address", "", new { @id = "address", placeholder = "Địa chỉ" })
+            <button class="addCategory" type="submit">Thêm nhà cung cấp</button>
+        }
+    </div>
+
+    <p>@TempData["Message"]</p>
+    <table class="supplier-table">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Phân loại</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.suppliers)
+            {
+                <tr>
+                    <td>@item.SupplierId</td>
+                    <td>@item.SupplierName</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>
+                        @* <a class="btn__edit" asp-action="EditSupplier" asp-route-id="@item.SupplierId">Chỉnh sửa</a> *@
+                        @* <a class="btn__delete" asp-action="DeleteSupplier" asp-route-id="@item.SupplierId">Xóa</a> *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Container chính */
+    .container {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    /* Header */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .header h2 {
+            color: #333;
+        }
+
+    .addSupplier {
+        background: #3498db;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+    }
+
+        .addSupplier:hover {
+            background: #2980b9;
+        }
+
+    /* Bảng sản phẩm */
+    .supplier-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+        .supplier-table th, .supplier-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .supplier-table th {
+            background: #2c3e50;
+            color: white;
+        }
+</style>

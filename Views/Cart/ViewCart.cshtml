@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewData["Title"] = "ViewCart";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+}
+
+
+@model (List<CartDetail> cart, List<Product> products) 
+
+<h2>Giỏ hàng</h2>  
+<table class="table">  
+    <thead>  
+        <tr>  
+            <th>Sản phẩm</th>  
+            <th>Giá</th>  
+            <th>Số lượng</th>  
+            <th>Giảm giá (%)</th>  
+            <th>Thành tiền</th>  
+            <th>Hành động</th>  
+        </tr>  
+    </thead>  
+    <tbody>  
+        @foreach (var item in Model.cart)  
+        {
+            var detail = Model.products.Where(p => p.ProductId == item.ProductId).FirstOrDefault();
+            <tr>
+                <td>
+                    <img src="@Url.Content("~/ProductImages/" + detail.Image)" alt="Ảnh sản phẩm lớn" class="image" />
+                    <p>@detail.ProductName</p>
+                </td>
+                <td>@detail.Price</td>
+                <td>@item.Quantity</td>
+                <td>@detail.Discount</td>
+                <td>@(detail.Price * (100 - detail.Discount) / 100 * item.Quantity)</td>
+                <td><a href="#">Xóa sản phẩm</a></td>
+            </tr>
+        }  
+      </tbody>  
+  </table>  
+
+  <style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table thead {
+            background-color: #4CAF50;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+    .image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .image:hover {
+            transform: scale(1.1);
+        }
+
+    p {
+        margin: 5px 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    /* Căn chỉnh giá, số lượng, giảm giá và tổng */
+    .table td:nth-child(2),
+    .table td:nth-child(3),
+    .table td:nth-child(4),
+    .table td:nth-child(5) {
+        font-weight: bold;
+        color: #ff5722;
+    }
+
+  </style>
+
+

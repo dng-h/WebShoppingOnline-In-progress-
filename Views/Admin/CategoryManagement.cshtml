@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "CategoryManagement";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model (List<Category> categories, string newId)
+
+<div class="container">
+    <div class="header">
+        <h2>Phân loại sản phẩm</h2>
+        @using (Html.BeginForm("CategoryManagement", "Admin", FormMethod.Post))
+        {
+            @Html.TextBox("categoryId", Model.newId, new {@id="categoryId", disabled="disabled"})
+            @Html.TextBox("categoryName", "", new { @id = "categoryName", placeholder = "Tên phân loại", required = "required" })
+            <button class="addCategory" type="submit">Thêm phân loại</button>
+        }
+    </div>
+
+    <p>@TempData["Message"]</p>
+    <table class="category-table">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Phân loại</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.categories)
+            {
+                <tr>
+                    <td>@item.CategoryId</td>
+                    <td>@item.CategoryName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Container chính */
+    .container {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    /* Header */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .header h2 {
+            color: #333;
+        }
+
+    .addCategory {
+        background: #3498db;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+    }
+
+        .addCategory:hover {
+            background: #2980b9;
+        }
+
+    /* Bảng sản phẩm */
+    .category-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+        .category-table th, .category-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .category-table th {
+            background: #2c3e50;
+            color: white;
+        }
+</style>
+
