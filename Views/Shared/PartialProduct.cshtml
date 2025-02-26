@@ -1,0 +1,27 @@
+﻿@model Product
+
+
+@if(Model.Amount > 0){
+<div class="featured__item">
+    <div class="featured__item__pic">
+        <img src="@Url.Content("~/ProductImages/" + Model.Image)" alt="@Model.ProductName" />
+    </div>
+    <div class="feature__item__text">
+        <h6><a asp-controller="Home" asp-action="ProductDetail" asp-route-id="@Model.ProductId">@Model.ProductName</a></h6>
+        <div class="feature__item__price">
+            @if (Model.Discount != 0)
+            {
+                <h5 style="text-decoration: line-through;">@Model.Price VNĐ</h5>
+                <span id="price_@Model.ProductId"></span>
+            }
+            else
+            {
+                <h5>@Model.Price VNĐ</h5>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("price_@Model.ProductId").innerText = (@Model.Price*(100-@Model.Discount)/100.0).toFixed(2) + " VNĐ";
+</script>
+}

@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery-3.7.1.js"></script>
+</head>
+<body>
+    @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+    {
+        <div class="signup">
+            <h2>Đăng ký tài khoản</h2>
+            @Html.TextBox("username", "", new { @class = "register__username", placeholder = "Username", required = "required" })<br><br>
+            @Html.TextBox("password", "", new { @class = "register__password", Type = "password", placeholder = "Password", required = "required" })<br><br>
+            @Html.TextBox("confirmPassword", "", new { @class = "register__confirm__password", Type = "password", placeholder = "Confirm password", required = "required" })<br><br>
+            @Html.TextBox("fullName", "", new { @class = "register__fullname", placeholder = "Full name"})<br><br>
+            @Html.TextBox("phone", "", new { @class = "register__phone", placeholder = "Phone number"})<br><br>
+            @Html.TextBox("address", "", new { @class = "register__address", placeholder = "Address"})<br><br>
+            <button class="signup__button" id="signup" type="submit">Đăng ký</button>
+            <p class="message">@TempData["Message"]</p>
+        </div>
+    }
+    @if(ViewBag.Message == "OK")
+    {
+        <script>
+            alert("Đăng ký thành công, bạn sẽ được chuyển hướng sang trang đăng nhập")
+            window.location.href = '@Url.Action("Login")'
+        </script>
+    }
+</body>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    .signup {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 350px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .signup input {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        display: block;
+    }
+
+    .signup__button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+        .signup__button:hover {
+            background: #0056b3;
+        }
+
+    #message {
+        color: red;
+        margin-top: 10px;
+    }
+
+</style>
+</html>

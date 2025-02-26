@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Category";
+    Layout = string.IsNullOrEmpty(Context.Session.GetString("UserName"))
+        ? "~/Views/Shared/_Layout.cshtml"
+        : "~/Views/Shared/HomeLayout.cshtml";
+}
+
+@model List<Product>
+
+<div class="list__products">
+    @foreach (var item in Model)
+    {
+        @await Html.PartialAsync("PartialProduct", item);
+    }
+</div>

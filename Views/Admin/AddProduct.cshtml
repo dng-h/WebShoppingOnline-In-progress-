@@ -1,0 +1,234 @@
+﻿
+@{
+    ViewData["Title"] = "AddProduct";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model (string id, List<Category> categories, List<Supplier> suppliers)
+
+<div class="content">
+
+    <h2 id="title">Thêm sản phẩm mới</h2>
+    <p class="message">@TempData["Message"]</p>
+
+@using (Html.BeginForm("AddProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label>Mã sản phẩm</label>
+        @Html.TextBox("productId", Model.id, new {@id="productId", disabled="disabled"})
+    </div>
+
+    <div class="form-group">
+        <label>Tên sản phẩm</label>
+        @Html.TextBox("productName", "", new { @id = "productName", required="required"})
+    </div>
+
+    <div class="form-group category-dropdown">
+        <label>Phân loại</label>
+        @Html.TextBox("categoryName", "", new { @id = "categoryName", @readonly = "readonly", required = "required" })
+        <ul id="menu__categories">
+            @if (Model.categories != null && Model.categories.Any())
+            {
+                @foreach (var item in Model.categories)
+                {
+                    <li onclick="getCategory('@item.CategoryName','@item.CategoryId')">@item.CategoryName</li>
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="form-group supplier-dropdown">
+        <label>Nhà cung cấp</label>
+        @Html.TextBox("supplierName", "", new { @id = "supplierName", @readonly="readonly", required="required"})
+        <ul id="menu__suppliers">
+            @if (Model.suppliers != null && Model.suppliers.Any())
+            {
+                @foreach (var item in Model.suppliers)
+                {
+                    <li onclick="getSupplier('@item.SupplierName','@item.SupplierId')">@item.SupplierName</li>
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="form-group">
+        <label>Giá (VNĐ)</label>
+        @Html.TextBox("price", "", new { @id = "price", Type="number", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label>Số lượng</label>
+        @Html.TextBox("amount", "", new { @id = "amount", Type="number", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label>Giảm giá (%)</label>
+        @Html.TextBox("discount", "", new { @id = "discount", Type="number", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label>Ảnh đại diện</label>
+        @Html.TextBox("avatar", "", new { @id = "avatar", Type = "file", accept = "image/*"})
+    </div>
+
+    <div class="form-group">
+        <label>Hình ảnh sản phẩm</label>
+        @Html.TextBox("images", "", new { @id = "images", Type="file", multiple="multiple", accept="image/*"})
+    </div>
+
+    <div class="form-group">
+        <label>Mô tả ngắn</label>
+        @Html.TextArea("shortDescription", new { @id = "shortDescription" })
+    </div>
+
+    <div class="form-group">
+        <label>Mô tả sản phẩm</label>
+        @Html.TextArea("productDescription", new { @id = "productDescription" })
+    </div>
+
+    <button id="addProductBtn" type="submit">Thêm sản phẩm</button>
+    }
+</div>
+
+<style>
+    .content {
+        width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --------- Tiêu đề --------- */
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* --------- Form group --------- */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+    /* --------- Phân loại dropdown --------- */
+    .category-dropdown, .supplier-dropdown {
+        position: relative;
+    }
+
+    #categoryName, #supplierName {
+        cursor: pointer;
+        background: #f9f9f9;
+    }
+
+    #menu__categories, #menu__suppliers {
+        display: none;
+        list-style: none;
+        padding: 5px;
+        margin: 0;
+        border: 1px solid #ccc;
+        background: #fff;
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 100;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        #menu__categories li, #menu__suppliers li {
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+            #menu__categories li:hover, #menu_suppliers li:hover {
+                background: #ddd;
+            }
+
+    /* --------- Mô tả ngắn & Mô tả chi tiết --------- */
+    #shortDescription,
+    #productDescription {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        resize: none; /* Ngăn chặn thay đổi kích thước */
+    }
+
+    #shortDescription {
+        height: 80px; /* Chiều cao cố định cho mô tả ngắn */
+    }
+
+    #productDescription {
+        height: 150px; /* Chiều cao cố định cho mô tả chi tiết */
+    }
+
+
+    /* --------- Nút Thêm sản phẩm --------- */
+    button#addProductBtn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #28a745;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+        button#addProductBtn:hover {
+            background: #218838;
+        }
+
+</style>
+
+<script>
+    const categoryName = document.getElementById("categoryName");
+    const supplierName = document.getElementById("supplierName");
+    const menuCategories = document.getElementById("menu__categories");
+    const menuSuppliers = document.getElementById("menu__suppliers");
+
+    categoryName.addEventListener("focus", function () {
+        menuCategories.style.display = "block";
+    });
+
+    supplierName.addEventListener("focus", function () {
+        menuSuppliers.style.display = "block";
+    });
+
+    function getCategory(name, id) {
+        $('#categoryName').val(name)
+        $('#categoryId').val(id);
+        menuCategories.style.display = "none";
+        console.log($('#categoryId').val())
+    }
+
+    function getSupplier(name, id) {
+        $('#supplierName').val(name)
+        $('#supplierId').val(id);
+        menuSuppliers.style.display = "none";
+        console.log($('#supplierId').val())
+    }
+</script>

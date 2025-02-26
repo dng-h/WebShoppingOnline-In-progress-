@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Category>
+
+<div class="categories__menu">
+    <div class="categories__all">
+        <i class="fa fa-bars"></i>
+        <span>Danh mục sản phẩm</span>
+        <i class="fa-solid fa-caret-down" onclick="toggleMenu()"></i>
+    </div>
+    <div class="dropdown-menu" id="dropdownMenu">
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li><a asp-controller="Home" asp-action="Category" asp-route-name="@item.CategoryName">@item.CategoryName</a></li>
+        }
+    </ul>
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        var menu = document.getElementById("dropdownMenu")
+        menu.style.display = (menu.style.display === "block") ? "none" : "block"
+    }
+
+    document.addEventListener("click", function(event) {
+        var dropdown = document.querySelector(".dropdown")
+        if (!dropdown.contains(event.target)) {
+            document.getElementById("dropdownMenu").style.display = "none"
+        }
+    })
+</script>
+
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* .dropdown-button { */
+    /*     padding: 10px 15px; */
+    /*     border: none; */
+    /*     cursor: pointer; */
+    /*     border-radius: 5px; */
+    /* } */
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 150px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 100;
+    }
+
+        .dropdown-menu li {
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-menu li:hover {
+                background-color: #f1f1f1;
+            }
+</style>

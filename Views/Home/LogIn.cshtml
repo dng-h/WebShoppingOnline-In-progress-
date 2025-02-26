@@ -1,0 +1,100 @@
+﻿@{
+    Layout = "";
+}
+
+@model Account
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery-3.7.1.js"></script>
+</head>
+<body>
+    @using (Html.BeginForm("LogIn", "Home", FormMethod.Post))
+    {
+        <div class="login">
+            <h2>Đăng nhập</h2>
+            @Html.TextBoxFor(x => x.UserName, new { @class = "login__username", placeholder = "Username", required = "required" })<br><br>
+            @Html.TextBoxFor(x => x.Password, new { @class = "login__password", Type = "password", placeholder = "Password", required = "required" })<br><br>
+            <a id="forget__password" href="#">Quên mật khẩu?</a><br><br>
+            <button class="login__submit" type="submit">Đăng nhập</button>
+            <p class="login__error">@TempData["Message"]</p>
+            <a class="return__home" asp-action="Index">Quay lại trang chủ</a>
+        </div>
+    }
+</body>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    .login {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 320px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .login__username, .login__password {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .login__submit {
+        width: 100%;
+        padding: 10px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .login__submit:hover {
+            background: #218838;
+        }
+
+    #forget__password {
+        display: inline-block;
+        margin-bottom: 15px;
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+        #forget__password:hover {
+            text-decoration: underline;
+        }
+
+    .login__error {
+        display: inline-block;
+        margin-top: 10px;
+        color: red;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+</style>
+</html>

@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewData["Title"] = "ProductManagement";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model List<Product>
+
+<div class="container">
+    <div class="header">
+        <h2>Quản Lý Sản Phẩm</h2>
+        <button class="add-btn">
+            <a asp-action="AddProduct">Thêm sản phẩm mới</a>
+        </button>
+    </div>
+
+    <div class="summary">
+        <div class="summary-box">
+            <h3>Tổng sản phẩm</h3>
+            <p>@Model.Count</p>
+        </div>
+        <div class="summary-box">
+            <h3>Sản phẩm còn hàng</h3>
+            <p>@Model.Count(p => p.Amount > 0)</p>
+        </div>
+        <div class="summary-box">
+            <h3>Sản phẩm hết hàng</h3>
+            <p>@Model.Count(p => p.Amount == 0)</p>
+        </div>
+    </div>
+
+    <div class="filter">
+        <input type="text" placeholder="Tìm kiếm sản phẩm...">
+        <select>
+            <option value="">Chọn phân loại</option>
+            @foreach(var item in ((Dictionary<string, string>)ViewBag.Categories).Values.Distinct())
+            {
+                <option value="@item">@item</option>
+            }
+        </select>
+        <button class="filter-btn">Lọc</button>
+    </div>
+
+    <p>@TempData["Message"]</p>
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Mã</th>
+                <th>Giá</th>
+                <th>Phân loại</th>
+                <th>Số lượng</th>
+                <th>Giảm giá</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td><img src="@Url.Content("~/ProductImages/" + item.Image)" alt="Ảnh SP"></td>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductId</td>
+                    <td>@item.Price</td>
+                    <td>
+                        @(ViewBag.Categories.ContainsKey(item.CategoryId)? @ViewBag.Categories[item.CategoryId]: "")
+                    </td>
+                    <td>@item.Amount</td>
+                    <td>@item.Discount</td>
+                    <td>
+                        <a class="btn__edit" asp-action="EditProduct" asp-route-id="@item.ProductId">Chỉnh sửa</a>
+                        <a class="btn__delete" asp-action="DeleteProduct" asp-route-id="@item.ProductId">Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Container chính */
+    .container {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    /* Header */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .header h2 {
+            color: #333;
+        }
+
+    .add-btn {
+        background: #3498db;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+    }
+
+        .add-btn:hover {
+            background: #2980b9;
+        }
+
+    /* Phần tóm tắt sản phẩm */
+    .summary {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .summary-box {
+        flex: 1;
+        background: #f1f1f1;
+        padding: 15px;
+        text-align: center;
+    }
+
+        .summary-box h3 {
+            color: #555;
+        }
+
+    /* Bộ lọc sản phẩm */
+    .filter {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+        .filter input, .filter select, .filter-btn {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+    .filter-btn {
+        background: #27ae60;
+        color: white;
+        cursor: pointer;
+    }
+
+        .filter-btn:hover {
+            background: #219150;
+        }
+
+    /* Bảng sản phẩm */
+    .product-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-table th {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .product-table td img {
+            width: 50px;
+            height: 50px;
+        }
+</style>

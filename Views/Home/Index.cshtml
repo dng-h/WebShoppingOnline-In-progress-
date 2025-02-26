@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = string.IsNullOrEmpty(Context.Session.GetString("UserName"))
+        ? "~/Views/Shared/_Layout.cshtml"
+        : "~/Views/Shared/HomeLayout.cshtml";
+}
+
+@model List<Product>
+
+<div class="new__products">
+    <p class="new__products__title">Sản phẩm mới</p>
+    @foreach(var item in Model.OrderByDescending(p => p.ProductId).Take(5))
+    {
+        @await Html.PartialAsync("PartialProduct", item);
+    }
+</div>
+
+<div class="list__products">
+    <p class="list__products__title">Sản phẩm</p>
+    @foreach (var item in Model)
+    {
+        @await Html.PartialAsync("PartialProduct", item);
+    }
+</div>
