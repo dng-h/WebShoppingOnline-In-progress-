@@ -19,7 +19,7 @@ public partial class Account
 
     public DateTime? CreatedDate { get; set; }
 
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

@@ -51,12 +51,13 @@
                 <i class="fa-solid fa-basket-shopping"></i>
                 Giỏ hàng
             </a>
-            <div class="dropdown">
-                <button class="dropdown-button" onclick="toggleMenu()">
+            <div class="userdropdown">
+                <button class="userdropdown-button" onclick="toggleUser()">
                     <i class="fa-solid fa-circle-user"></i>
                 </button>
-                <div class="dropdown-menu" id="dropdownMenu">
+                <div class="userdropdown-menu" id="userdropdownMenu">
                     <a href="#">Sửa thông tin</a>
+                    <a href="#">Đơn hàng của tôi</a>
                     <a asp-controller="Home" asp-action="LogOut">Đăng xuất</a>
                 </div>
             </div>
@@ -65,33 +66,33 @@
         </div>
 
         <script>
-            function toggleMenu() {
-                var menu = document.getElementById("dropdownMenu")
+            function toggleUser() {
+                var menu = document.getElementById("userdropdownMenu")
                 menu.style.display = (menu.style.display === "block") ? "none" : "block"
             }
 
             document.addEventListener("click", function(event) {
-                var dropdown = document.querySelector(".dropdown")
+                var dropdown = document.querySelector(".userdropdown")
                 if (!dropdown.contains(event.target)) {
-                    document.getElementById("dropdownMenu").style.display = "none"
+                    document.getElementById("userdropdownMenu").style.display = "none"
                 }
             })
         </script>
 
         <style>
-            .dropdown {
+            .userdropdown {
                 position: relative;
                 display: inline-block;
             }
 
-            .dropdown-button {
+            .userdropdown-button {
                 padding: 10px 15px;
                 border: none;
                 cursor: pointer;
                 border-radius: 5px;
             }
 
-            .dropdown-menu {
+            .userdropdown-menu {
                 display: none;
                 position: absolute;
                 background-color: white;
@@ -101,14 +102,14 @@
                 z-index: 100;
             }
 
-                .dropdown-menu a {
+                .userdropdown-menu a {
                     color: black;
                     padding: 10px;
                     text-decoration: none;
                     display: block;
                 }
 
-                    .dropdown-menu a:hover {
+                    .userdropdown-menu a:hover {
                         background-color: #f1f1f1;
                     }
         </style>

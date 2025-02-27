@@ -15,6 +15,8 @@ public partial class OrderDetail
 
     public int? Amount { get; set; }
 
+    public int? Discount { get; set; }
+
     public decimal? Total { get; set; }
 
     public string? Note { get; set; }

@@ -2,12 +2,15 @@
 @{
     ViewData["Title"] = "ViewCart";
     Layout = "~/Views/Shared/HomeLayout.cshtml";
+    decimal? total = 0;
 }
 
 
 @model (List<CartDetail> cart, List<Product> products) 
 
 <h2>Giỏ hàng</h2>  
+<div class="body">
+<div class="cart-container">
 <table class="table">  
     <thead>  
         <tr>  
@@ -23,22 +26,146 @@
         @foreach (var item in Model.cart)  
         {
             var detail = Model.products.Where(p => p.ProductId == item.ProductId).FirstOrDefault();
+            total = total + (detail.Price * (100 - detail.Discount) / 100 * item.Quantity);
             <tr>
                 <td>
                     <img src="@Url.Content("~/ProductImages/" + detail.Image)" alt="Ảnh sản phẩm lớn" class="image" />
                     <p>@detail.ProductName</p>
                 </td>
                 <td>@detail.Price</td>
-                <td>@item.Quantity</td>
+                <td class="quantity">
+                    <button onclick="minus('@item.ProductId')">  -  </button>
+                    <p>@item.Quantity</p>
+                    <button onclick="plus('@item.ProductId')">  +  </button>
+                </td>
                 <td>@detail.Discount</td>
                 <td>@(detail.Price * (100 - detail.Discount) / 100 * item.Quantity)</td>
-                <td><a href="#">Xóa sản phẩm</a></td>
+                <td><button class="remove-btn" onclick="remove('@item.ProductId')">Xóa sản phẩm</button></td>
             </tr>
         }  
       </tbody>  
   </table>  
+</div>
+
+<div class="checkout-container">
+    <h2>Thanh Toán</h2>
+    <p><strong>Tổng tiền:</strong> @total</p>
+
+    <label>Hình thức nhận hàng:</label>
+    <select id="delivery">
+        <option>Nhận tại cửa hàng</option>
+        <option>Giao hàng tận nơi</option>
+    </select>
+
+    <label>Thông tin khách hàng:</label>
+    <input id="name" type="text" placeholder="Họ và Tên">
+    <input id="phone" type="text" placeholder="Số điện thoại">
+    <input id="address" type="text" placeholder="Địa chỉ">
+    <a href="#">Lấy thông tin tài khoản</a>
+
+    <label>Phương thức thanh toán:</label>
+    <select id="payment">
+        <option>Tiền mặt</option>
+        <option>Chuyển khoản</option>
+    </select>
+
+    <button onclick="makeOrder()">Đặt hàng</button>
+</div>
+</div>
+
+<script>
+    function makeOrder() {
+        var delivery = $('#delivery').val();
+        var name = $('#name').val();
+        var phone = $('#phone').val();
+        var address = $('#address').val();
+        var payment = $('#payment').val();
+
+        var data = {
+            delivery: delivery,
+            name: name,
+            phone: phone,
+            address: address,
+            payment: payment
+        }
+
+        $.ajax ({
+            url: "/Cart/MakeOrder",
+            type: "POST",
+            data: data,
+            dataType: 'JSON',
+            success: function(res) {
+                if(res.status) {
+                    alert(res.message)
+                    window.location.href = '/Cart/ViewCart'
+                }
+            }
+        })
+    }
+
+    function minus(id) {
+        var data = {
+            id: id
+        }
+
+        $.ajax ({
+            url: "/Cart/ReduceQuantity",
+            type: "POST",
+            data: data,
+            dataType: 'JSON',
+            success: function(res) {
+                if(res.status) {
+                    window.location.href = '/Cart/ViewCart'
+                }
+            }
+        })
+    }
+
+    function plus(id) {
+        var data = {
+            id: id
+        }
+
+        $.ajax ({
+            url: "/Cart/IncreaseQuantity",
+            type: "POST",
+            data: data,
+            dataType: 'JSON',
+            success: function(res) {
+                if(res.status) {
+                    window.location.href = '/Cart/ViewCart'
+                }
+            }
+        })
+    }
+
+    function remove(id) {
+        var data = {
+        id: id
+        }
+
+        $.ajax ({
+            url: "/Cart/RemoveFromCart",
+            type: "POST",
+            data: data,
+            dataType: 'JSON',
+            success: function(res) {
+                if(res.status) {
+                    window.location.href = '/Cart/ViewCart'
+                }
+            }
+        })
+    }
+</script>
 
   <style>
+    .body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
     .table {
         width: 100%;
         border-collapse: collapse;
@@ -93,6 +220,44 @@
         color: #ff5722;
     }
 
-  </style>
+    .quantity {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px
+    }
 
+    .cart-container {
+        width: 60%;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .checkout-container {
+        width: 35%;
+        border: 1px solid #ccc;
+        padding: 15px;
+    }
+
+        .checkout-container label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .checkout-container input, select {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        .checkout-container button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+  </style>
 

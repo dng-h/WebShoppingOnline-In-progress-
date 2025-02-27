@@ -79,11 +79,6 @@ public class HomeController : Controller
         acc.CreatedDate = DateTime.Now;
         myDb.Accounts.Add(acc);
 
-        Cart cart = new Cart();
-        cart.CartId = _func.SetId<Cart>("CR", c => c.CartId);
-        cart.AccountId = id;
-        myDb.Carts.Add(cart);
-
         myDb.SaveChanges();
         ViewBag.Message = "OK";
 

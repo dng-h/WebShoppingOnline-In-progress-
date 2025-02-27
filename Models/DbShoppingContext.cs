@@ -17,8 +17,6 @@ public partial class DbShoppingContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
-    public virtual DbSet<Cart> Carts { get; set; }
-
     public virtual DbSet<CartDetail> CartDetails { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -60,40 +58,24 @@ public partial class DbShoppingContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Cart>(entity =>
-        {
-            entity.Property(e => e.CartId)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("CartID");
-            entity.Property(e => e.AccountId)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("AccountID");
-
-            entity.HasOne(d => d.Account).WithMany(p => p.Carts)
-                .HasForeignKey(d => d.AccountId)
-                .HasConstraintName("FK_Carts_Accounts");
-        });
-
         modelBuilder.Entity<CartDetail>(entity =>
         {
             entity.Property(e => e.CartDetailId)
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("CartDetailID");
-            entity.Property(e => e.CartId)
+            entity.Property(e => e.AccountId)
                 .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("CartID");
+                .HasColumnName("AccountID");
             entity.Property(e => e.ProductId)
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("ProductID");
 
-            entity.HasOne(d => d.Cart).WithMany(p => p.CartDetails)
-                .HasForeignKey(d => d.CartId)
-                .HasConstraintName("FK_CartDetails_Carts");
+            entity.HasOne(d => d.Account).WithMany(p => p.CartDetails)
+                .HasForeignKey(d => d.AccountId)
+                .HasConstraintName("FK_CartDetails_Accounts");
 
             entity.HasOne(d => d.Product).WithMany(p => p.CartDetails)
                 .HasForeignKey(d => d.ProductId)
