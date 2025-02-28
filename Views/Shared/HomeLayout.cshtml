@@ -35,40 +35,39 @@
                 Liên hệ
             </a>
         </nav>
-        </div>
 
-        <div class="nav2">
-        <div class="categoies">
-            @await Component.InvokeAsync("CategoriesMenu")
-        </div>
-
-        <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm sản phẩm...">
-            <button>Tìm kiếm</button>
-        </div>
-        <div class="header-icons">
-                <a asp-controller="Cart" asp-action="ViewCart">
-                <i class="fa-solid fa-basket-shopping"></i>
-                Giỏ hàng
-            </a>
-            <div class="userdropdown">
-                <button class="userdropdown-button" onclick="toggleUser()">
-                    <i class="fa-solid fa-circle-user"></i>
-                </button>
-                <div class="userdropdown-menu" id="userdropdownMenu">
-                    <a href="#">Sửa thông tin</a>
-                    <a href="#">Đơn hàng của tôi</a>
-                    <a asp-controller="Home" asp-action="LogOut">Đăng xuất</a>
-                </div>
-            </div>
+                <div class="header-icons">
+                    <a asp-controller="Cart" asp-action="ViewCart">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        Giỏ hàng
+                    </a>
+                    <div class="userdropdown">
+                        <button class="userdropdown-button" onclick="toggleUser()">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </button>
+                        <div class="userdropdown-menu" id="userdropdownMenu">
+                            <a href="#">Sửa thông tin</a>
+                            <a asp-controller="Home" asp-action="ViewOrder">Đơn hàng của tôi</a>
+                            <a asp-controller="Home" asp-action="LogOut">Đăng xuất</a>
+                        </div>
+                    </div>
 
         </div>
         </div>
+
 
         <script>
             function toggleUser() {
                 var menu = document.getElementById("userdropdownMenu")
                 menu.style.display = (menu.style.display === "block") ? "none" : "block"
+
+                var rect = menu.getBoundingClientRect();
+                var windowWidth = window.innerWidth;
+
+                if (rect.right > windowWidth) {
+                    menu.style.left = "auto";
+                    menu.style.right = "0";
+                }
             }
 
             document.addEventListener("click", function(event) {

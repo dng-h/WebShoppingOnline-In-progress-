@@ -35,30 +35,22 @@
                 Liên hệ
             </a>
         </nav>
-        </div>
 
-        <div class="nav2">
-        <div class="categoies">
-            @await Component.InvokeAsync("CategoriesMenu")
-        </div>
-
-        <div class="search-bar">
-            <input type="text" placeholder="Tìm kiếm sản phẩm...">
-            <button>Tìm kiếm</button>
-        </div>
-        <div class="header-icons">
-            <a asp-action="LogIn">
-                <i class="fa-solid fa-basket-shopping"></i>
-                Giỏ hàng
-            </a>
-            <a asp-action="LogIn">
-                <i class="fa-solid fa-right-to-bracket"></i>
-                Đăng nhập
-            </a>
-            <a asp-action="Register">
-                <i class="fa-solid fa-user-plus"></i>
-                Đăng ký
-            </a>
+        <div>
+                <div class="header-icons">
+                    <a asp-action="LogIn">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        Giỏ hàng
+                    </a>
+                    <a asp-action="LogIn">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Đăng nhập
+                    </a>
+                    <a asp-action="Register">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Đăng ký
+                    </a>
+                </div>
         </div>
         </div>
     </header>

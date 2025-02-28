@@ -10,23 +10,24 @@
 
 <h2>Giỏ hàng</h2>  
 <div class="body">
-<div class="cart-container">
-<table class="table">  
-    <thead>  
-        <tr>  
-            <th>Sản phẩm</th>  
-            <th>Giá</th>  
-            <th>Số lượng</th>  
-            <th>Giảm giá (%)</th>  
-            <th>Thành tiền</th>  
-            <th>Hành động</th>  
-        </tr>  
-    </thead>  
-    <tbody>  
-        @foreach (var item in Model.cart)  
-        {
-            var detail = Model.products.Where(p => p.ProductId == item.ProductId).FirstOrDefault();
-            total = total + (detail.Price * (100 - detail.Discount) / 100 * item.Quantity);
+    <div class="cart-container">
+        <table class="table">  
+            <thead>  
+                <tr>  
+                    <th>Sản phẩm</th>  
+                    <th>Giá</th>  
+                    <th>Số lượng</th>  
+                    <th>Giảm giá (%)</th>  
+                    <th>Thành tiền</th>  
+                    <th>Hành động</th>  
+                </tr>  
+            </thead>  
+            <tbody>  
+                @foreach (var item in Model.cart)  
+                {
+                    var detail = Model.products.Where(p => p.ProductId == item.ProductId).FirstOrDefault();
+                    decimal? p = 100;
+                    total = total + (detail.Price * (100 - detail.Discount) / p * item.Quantity);
             <tr>
                 <td>
                     <img src="@Url.Content("~/ProductImages/" + detail.Image)" alt="Ảnh sản phẩm lớn" class="image" />

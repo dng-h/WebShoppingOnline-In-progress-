@@ -8,6 +8,23 @@
 
 @model List<Product>
 
+<div class="categoies">
+    @await Component.InvokeAsync("CategoriesMenu")
+</div>
+
+<style>
+    .categoies {
+        width: 250px;
+    }
+
+    .categoies a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        padding: 8px 12px;
+    }
+</style>
+
 <div class="list__products">
     @foreach (var item in Model)
     {

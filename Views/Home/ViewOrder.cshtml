@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewData["Title"] = "ViewOrder";
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+    decimal? totalPrice = 0;
+}
+
+@model (List<Order> allOrders, List<OrderDetail> lstOrderDetails, List<Product> lstProducts)
+
+<div class="container">
+    <!-- Phần tìm kiếm -->
+    <div class="search-bar">
+        <input type="text" placeholder="Nhập mã đơn hàng để tìm kiếm...">
+        <button><i class="fa fa-search"></i> Tìm kiếm</button>
+    </div>
+
+        @foreach(var order in Model.allOrders)
+        {
+            totalPrice = 0;
+            <div class="order">
+                <div class="order-header">
+                    <span>Mã đơn hàng: @order.OrderId</span>
+                    <span class="order-status">@order.Status</span>
+                </div>
+
+                <div class="order-items">
+                    @foreach(var item in Model.lstOrderDetails.Where(od => od.OrderId == order.OrderId).ToList())
+                    {
+                        var product = Model.lstProducts.Where(p => p.ProductId == item.ProductId).FirstOrDefault();
+                        decimal? p = 100;
+                        decimal? total = @item.Price * (100 - @item.Discount) / p * @item.Amount;
+                        totalPrice += total;
+
+                        <div class="order-item">
+                            <div class="product-info">
+                                <img class="product-img" src="@Url.Content("~/ProductImages/" + product.Image)" alt="Ảnh sản phẩm"/>
+                                <p>@product.ProductName</p>
+                            </div>
+                            <div class="product-price">@item.Price</div>
+                            <div class="product-quantity">x @item.Amount</div>
+                            <div class="product-discount">- @item.Discount %</div>
+                            <div class="product-total">@total</div>
+                        </div>
+                    }
+                </div>
+                <div class="order-footer">
+                    <span>Tổng tiền: <b>@totalPrice</b></span>
+                    <button class="cancel-button">Hủy Đơn Hàng</button>
+                </div>
+            </div>
+        }
+
+</div>
+
+<style>
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Phần tìm kiếm */
+    .search-bar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+        .search-bar input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    /* Đơn hàng */
+    .order {
+        background: #fff;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 15px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Phần đầu đơn hàng */
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        font-weight: bold;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .order-status {
+        color: green;
+    }
+
+    /* Sản phẩm */
+    .order-items {
+        margin: 15px 0;
+    }
+
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+    .product-info {
+        display:flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+    }
+
+    .product-info img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .product-price,
+    .product-quantity,
+    .product-discount,
+    .product-total {
+        width: 100px;
+        text-align: center;
+    }
+
+    /* Phần cuối đơn hàng */
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .cancel-button {
+        background-color: red;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>

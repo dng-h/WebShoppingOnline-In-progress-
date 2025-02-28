@@ -74,10 +74,6 @@ body {
     padding-top: 10px;
 }
 
-.categoies {
-    flex-grow: 1; /* Chiếm phần còn lại của không gian */
-}
-
 .search-bar {
     display: flex;
     align-items: center;

@@ -5,19 +5,104 @@
         : "~/Views/Shared/HomeLayout.cshtml";
 }
 
-@model List<Product>
+@model (List<Product> lstProducts, List<Product> bestSellers)
+
+<div class="headpage">
+    <div class="categoies">
+        @await Component.InvokeAsync("CategoriesMenu")
+    </div>
+    <div class="right-section">
+    <div class="search-bar">
+        <input type="text" placeholder="Tìm kiếm sản phẩm...">
+        <button>Tìm kiếm</button>
+    </div>
+    <div class="promotion">
+        <img class="promotion-img" src="" alt="Ảnh promotion" />
+    </div>
+    </div>
+</div>
+
+<style>
+    .headpage {
+        display: flex;
+        width: 100%; /* Kích thước cố định */
+        height: 350px; /* Giữ đủ không gian */
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+        gap: 20px;
+    }
+
+    .categoies {
+        width: 250px; /* Cố định chiều rộng danh mục */
+        overflow: auto; /* Cuộn nếu nội dung dài */
+    }
+
+        .categoies a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding: 8px 12px;
+        }
+
+    .right-section {
+        flex-grow: 1; /* Phần bên phải chiếm phần còn lại */
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 250px);
+    }
+
+    /* Thanh tìm kiếm */
+    .search-bar {
+        display: flex;
+        gap: 10px;
+        justify-items: center;
+        align-items: center;
+    }
+
+        .search-bar input {
+            flex-grow: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-bar button {
+            padding: 6px 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+    /* Ảnh khuyến mãi */
+    .promotion {
+        flex-grow: 1;
+        text-align: center;
+        margin-top: 10px; /* Để ảnh nằm dưới */
+    }
+
+    .promotion-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+</style>
 
 <div class="new__products">
     <p class="new__products__title">Sản phẩm mới</p>
-    @foreach(var item in Model.OrderByDescending(p => p.ProductId).Take(5))
+    @foreach(var item in Model.lstProducts)
     {
         @await Html.PartialAsync("PartialProduct", item);
     }
 </div>
 
 <div class="list__products">
-    <p class="list__products__title">Sản phẩm</p>
-    @foreach (var item in Model)
+    <p class="list__products__title">Bán chạy</p>
+    @foreach (var item in Model.bestSellers)
     {
         @await Html.PartialAsync("PartialProduct", item);
     }

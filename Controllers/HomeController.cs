@@ -21,8 +21,21 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        var lstProducts = myDb.Products.ToList();
-        return View(lstProducts);
+        var lstProducts = myDb.Products.OrderByDescending(p => p.ProductId).Take(10).ToList();
+        var tmp = myDb.OrderDetails.GroupBy(o => o.ProductId).Select(g => new
+        {
+            ProductId = g.Key,
+            TotalAmount = g.Sum(o => o.Amount)
+        }).OrderByDescending(g => g.TotalAmount).Take(10).ToList();
+
+        List<Product> bestSellers = new List<Product>();
+        foreach(var item in tmp)
+        {
+            bestSellers.Add(myDb.Products.Find(item.ProductId));
+        }
+
+        var model = (lstProducts, bestSellers);
+        return View(model);
     }
 
     public IActionResult Category(String name)
@@ -129,6 +142,30 @@ public class HomeController : Controller
         HttpContext.Session.Clear();
         HttpContext.Session.Remove("UserName");
         return RedirectToAction("Index");
+    }
+
+    public List<Order> GetOrders()
+    {
+        var username = HttpContext.Session.GetString("UserName");
+        var user = myDb.Accounts.Where(a => a.UserName == username).FirstOrDefault();
+        var allOrders = myDb.Orders.Where(o => o.AccountId == user.AccountId).OrderByDescending(o => o.OrderDate).ToList();
+        return allOrders;
+    }
+
+    public IActionResult ViewOrder()
+    {
+        var allOrders = GetOrders();
+        List<OrderDetail> lstOrderDetails = new List<OrderDetail>();
+        foreach(var order in allOrders)
+        {
+            var orderDetail = myDb.OrderDetails.Where(od => od.OrderId == order.OrderId).ToList();
+            lstOrderDetails.AddRange(orderDetail);
+        }
+        var lstProducts = myDb.Products.ToList();
+
+        var model = (allOrders, lstOrderDetails, lstProducts);
+
+        return View(model);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
